@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>Malla Curricular Interactiva - Ingeniería Eléctrica UNAL</title>
+<style>
+body{
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background:#f4f6f8;
+  margin:0;
+  padding:20px;
+}
+
+h1{text-align:center; color:#2c3e50;}
+
+.grid{
+  display:grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap:10px;
+}
+
+.column{
+  background:#ffffff;
+  border-radius:10px;
+  padding:10px;
+  box-shadow:0 2px 6px rgba(0,0,0,.08);
+}
+
+.column h2{
+  text-align:center;
+  font-size:15px;
+  margin:5px 0 10px;
+  color:#34495e;
+}
+
+.course{
+  background:#e3ecf5;
+  border-radius:8px;
+  padding:8px;
+  margin-bottom:8px;
+  cursor:pointer;
+  font-size:12px;
+  transition:.2s;
+}
+
+.course:hover{background:#d6e4f2;}
+
+.course.approved{
+  background:#b8e6c3;
+  text-decoration:line-through;
+}
+
+.course.locked{
+  background:#f0f0f0;
+  color:#999;
+  cursor:not-allowed;
+}
+
+.tooltip{
+  position:relative;
+}
+
+.tooltip:hover::after{
+  content:attr(data-tip);
+  position:absolute;
+  background:#333;
+  color:#fff;
+  padding:4px 6px;
+  font-size:11px;
+  border-radius:4px;
+  top:100%; left:0;
+  white-space:nowrap;
+}
+</style>
+</head>
+<body>
+
+<h1>Malla Curricular Interactiva – Ingeniería Eléctrica (UNAL)</h1>
+
+<div class="grid" id="grid"></div>
+
+<script>
+const courses = {
+  s1:[
+    {id:'calc_diff',name:'Cálculo Diferencial'},
+    {id:'geom',name:'Geometría Vectorial'},
+    {id:'intro',name:'Intro Ing. Eléctrica'},
+  ],
+  s2:[
+    {id:'calc_int',name:'Cálculo Integral',req:['calc_diff']},
+    {id:'algebra',name:'Álgebra Lineal',req:['geom']},
+    {id:'fis_mec',name:'Física Mecánica'}
+  ],
+  s3:[
+    {id:'calc_var',name:'Cálculo Multivariable',req:['calc_int']},
+    {id:'ecu_diff',name:'Ecuaciones Diferenciales',req:['calc_int']},
+    {id:'fis_em',name:'Electricidad y Magnetismo',req:['fis_mec']}
+  ],
+  s4:[
+    {id:'estad',name:'Estadística I',req:['calc_var']},
+    {id:'met_num',name:'Métodos Numéricos',req:['ecu_diff']},
+    {id:'circ2',name:'Análisis de Circuitos II',req:['fis_em']}
+  ],
+  s5:[
+    {id:'sig',name:'Señales y Sistemas',req:['ecu_diff']},
+    {id:'teo_em',name:'Teoría Electromagnética',req:['fis_em']},
+    {id:'elec1',name:'Electrónica Análoga I',req:['circ2']}
+  ],
+  s6:[
+    {id:'maq1',name:'Máquinas Eléctricas I',req:['circ2']},
+    {id:'ctrl',name:'Control',req:['sig']},
+    {id:'elec2',name:'Electrónica Análoga II',req:['elec1']}
+  ],
+  s7:[
+    {id:'maq2',name:'Máquinas Eléctricas II',req:['maq1']},
+    {id:'tele',name:'Telecomunicaciones',req:['sig']}
+  ],
+  s8:[
+    {id:'pot',name:'Análisis de Sistemas de Potencia',req:['maq2']},
+    {id:'auto',name:'Automatización',req:['ctrl']}
+  ],
+  s9:[
+    {id:'redes',name:'Redes Eléctricas',req:['pot']}
+  ],
+  s10:[
+    {id:'grado',name:'Trabajo de Grado',req:['redes']}
+  ]
+};
+
+const grid=document.getElementById('grid');
+let approved=JSON.parse(localStorage.getItem('approvedCourses')||'[]');
+
+function render(){
+  grid.innerHTML='';
+  Object.keys(courses).forEach((s,i)=>{
+    const col=document.createElement('div');
+    col.className='column';
+    col.innerHTML=`<h2>Semestre ${i+1}</h2>`;
+
+    courses[s].forEach(c=>{
+      const div=document.createElement('div');
+      const locked=c.req && !c.req.every(r=>approved.includes(r));
+
+      div.className='course'+(approved.includes(c.id)?' approved':'')+(locked?' locked tooltip':'');
+      div.textContent=c.name;
+      if(locked){
+        const faltan=c.req.filter(r=>!approved.includes(r)).join(', ');
+        div.dataset.tip='Falta aprobar: '+faltan;
+      }
+
+      div.onclick=()=>{
+        if(locked) return;
+        if(approved.includes(c.id)){
+          approved=approved.filter(x=>x!==c.id);
+        }else{
+          approved.push(c.id);
+        }
+        localStorage.setItem('approvedCourses',JSON.stringify(approved));
+        render();
+      };
+      col.appendChild(div);
+    });
+    grid.appendChild(col);
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>
