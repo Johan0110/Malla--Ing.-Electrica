@@ -2,170 +2,100 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<title>Malla Curricular Interactiva - Ingeniería Eléctrica UNAL</title>
+<title>Malla Curricular Interactiva – Ingeniería Eléctrica UNAL</title>
 <style>
-body{
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  background:#f4f6f8;
-  margin:0;
-  padding:20px;
-}
-
-h1{text-align:center; color:#2c3e50;}
-
-.grid{
-  display:grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap:10px;
-}
-
-.column{
-  background:#ffffff;
-  border-radius:10px;
-  padding:10px;
-  box-shadow:0 2px 6px rgba(0,0,0,.08);
-}
-
-.column h2{
-  text-align:center;
-  font-size:15px;
-  margin:5px 0 10px;
-  color:#34495e;
-}
-
-.course{
-  background:#e3ecf5;
-  border-radius:8px;
-  padding:8px;
-  margin-bottom:8px;
-  cursor:pointer;
-  font-size:12px;
-  transition:.2s;
-}
-
-.course:hover{background:#d6e4f2;}
-
-.course.approved{
-  background:#b8e6c3;
-  text-decoration:line-through;
-}
-
-.course.locked{
-  background:#f0f0f0;
-  color:#999;
-  cursor:not-allowed;
-}
-
-.tooltip{
-  position:relative;
-}
-
-.tooltip:hover::after{
-  content:attr(data-tip);
-  position:absolute;
-  background:#333;
-  color:#fff;
-  padding:4px 6px;
-  font-size:11px;
-  border-radius:4px;
-  top:100%; left:0;
-  white-space:nowrap;
-}
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f5f7fa;margin:0;padding:20px}
+h1{text-align:center;color:#2c3e50}
+.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:12px}
+.column{background:#fff;border-radius:12px;padding:10px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.column h2{text-align:center;font-size:14px;color:#34495e;margin:6px 0 10px}
+.course{background:#e8f0f8;border-radius:8px;padding:7px;margin-bottom:7px;font-size:12px;cursor:pointer;transition:.2s}
+.course:hover{background:#dbe7f5}
+.course.approved{background:#c7ead1;text-decoration:line-through}
+.course.locked{background:#f0f0f0;color:#999;cursor:not-allowed}
+.tooltip{position:relative}
+.tooltip:hover::after{content:attr(data-tip);position:absolute;background:#333;color:#fff;padding:4px 6px;font-size:11px;border-radius:4px;top:100%;left:0;white-space:nowrap;z-index:10}
 </style>
 </head>
 <body>
-
 <h1>Malla Curricular Interactiva – Ingeniería Eléctrica (UNAL)</h1>
-
 <div class="grid" id="grid"></div>
-
 <script>
-const courses = {
-  s1:[
-    {id:'calc_diff',name:'Cálculo Diferencial'},
-    {id:'geom',name:'Geometría Vectorial'},
-    {id:'intro',name:'Intro Ing. Eléctrica'},
-  ],
-  s2:[
-    {id:'calc_int',name:'Cálculo Integral',req:['calc_diff']},
-    {id:'algebra',name:'Álgebra Lineal',req:['geom']},
-    {id:'fis_mec',name:'Física Mecánica'}
-  ],
-  s3:[
-    {id:'calc_var',name:'Cálculo Multivariable',req:['calc_int']},
-    {id:'ecu_diff',name:'Ecuaciones Diferenciales',req:['calc_int']},
-    {id:'fis_em',name:'Electricidad y Magnetismo',req:['fis_mec']}
-  ],
-  s4:[
-    {id:'estad',name:'Estadística I',req:['calc_var']},
-    {id:'met_num',name:'Métodos Numéricos',req:['ecu_diff']},
-    {id:'circ2',name:'Análisis de Circuitos II',req:['fis_em']}
-  ],
-  s5:[
-    {id:'sig',name:'Señales y Sistemas',req:['ecu_diff']},
-    {id:'teo_em',name:'Teoría Electromagnética',req:['fis_em']},
-    {id:'elec1',name:'Electrónica Análoga I',req:['circ2']}
-  ],
-  s6:[
-    {id:'maq1',name:'Máquinas Eléctricas I',req:['circ2']},
-    {id:'ctrl',name:'Control',req:['sig']},
-    {id:'elec2',name:'Electrónica Análoga II',req:['elec1']}
-  ],
-  s7:[
-    {id:'maq2',name:'Máquinas Eléctricas II',req:['maq1']},
-    {id:'tele',name:'Telecomunicaciones',req:['sig']}
-  ],
-  s8:[
-    {id:'pot',name:'Análisis de Sistemas de Potencia',req:['maq2']},
-    {id:'auto',name:'Automatización',req:['ctrl']}
-  ],
-  s9:[
-    {id:'redes',name:'Redes Eléctricas',req:['pot']}
-  ],
-  s10:[
-    {id:'grado',name:'Trabajo de Grado',req:['redes']}
-  ]
+const courses={
+ s1:[
+  {id:'1000004',name:'Cálculo Diferencial'},
+  {id:'1000008',name:'Geometría Vectorial y Analítica'},
+  {id:'3009531',name:'Introducción a la Ingeniería Eléctrica'}
+ ],
+ s2:[
+  {id:'1000005',name:'Cálculo Integral',req:['1000004']},
+  {id:'1000003',name:'Álgebra Lineal',req:['1000008']},
+  {id:'1000019',name:'Física Mecánica',req:['1000004','1000008']}
+ ],
+ s3:[
+  {id:'1000006',name:'Cálculo en Varias Variables',req:['1000005']},
+  {id:'1000007',name:'Ecuaciones Diferenciales',req:['1000005','1000003']},
+  {id:'1000017',name:'Física de Electricidad y Magnetismo',req:['1000019','1000005']}
+ ],
+ s4:[
+  {id:'3006905',name:'Matemáticas Especiales',req:['1000007']},
+  {id:'3010651',name:'Estadística I',req:['1000005']},
+  {id:'3010478',name:'Termodinámica General',req:['1000019']}
+ ],
+ s5:[
+  {id:'3010481',name:'Análisis de Circuitos Eléctricos I',req:['1000004']},
+  {id:'3010435',name:'Fundamentos de Programación'},
+  {id:'3006907',name:'Métodos Numéricos',req:['1000005','1000003']}
+ ],
+ s6:[
+  {id:'3010496',name:'Análisis de Circuitos Eléctricos II',req:['3010481','1000007']},
+  {id:'3007756',name:'Laboratorio de Circuitos',req:['3010496']},
+  {id:'3010520',name:'Teoría Electromagnética',req:['1000017']}
+ ],
+ s7:[
+  {id:'3010421',name:'Señales y Sistemas Lineales',req:['3006905']},
+  {id:'3010402',name:'Control Entrada-Salida',req:['3010421']},
+  {id:'3010458',name:'Electrónica Análoga I',req:['3010496','3007756']}
+ ],
+ s8:[
+  {id:'3010457',name:'Electrónica Análoga II',req:['3010458']},
+  {id:'3010483',name:'Electrónica Digital',req:['3010458']},
+  {id:'3010398',name:'Automatización de Sistemas Eléctricos',req:['3010483','3010538']}
+ ],
+ s9:[
+  {id:'3010490',name:'Modelado de Líneas de Transmisión',req:['1000006','3006905','3010520']},
+  {id:'3010661',name:'Máquinas Eléctricas I',req:['3010520']},
+  {id:'3010494',name:'Telecomunicaciones',req:['3010421','3010483']}
+ ],
+ s10:[
+  {id:'3010662',name:'Máquinas Eléctricas II',req:['3010661']},
+  {id:'3010529',name:'Sistemas de Generación de Energía Eléctrica',req:['3010662','3010478']},
+  {id:'3010439',name:'Proyecto Integrado de Ingeniería',req:['3010407']}
+ ]
 };
 
 const grid=document.getElementById('grid');
 let approved=JSON.parse(localStorage.getItem('approvedCourses')||'[]');
 
 function render(){
-  grid.innerHTML='';
-  Object.keys(courses).forEach((s,i)=>{
-    const col=document.createElement('div');
-    col.className='column';
-    col.innerHTML=`<h2>Semestre ${i+1}</h2>`;
-
-    courses[s].forEach(c=>{
-      const div=document.createElement('div');
-      const locked=c.req && !c.req.every(r=>approved.includes(r));
-
-      div.className='course'+(approved.includes(c.id)?' approved':'')+(locked?' locked tooltip':'');
-      div.textContent=c.name;
-      if(locked){
-        const faltan=c.req.filter(r=>!approved.includes(r)).join(', ');
-        div.dataset.tip='Falta aprobar: '+faltan;
-      }
-
-      div.onclick=()=>{
-        if(locked) return;
-        if(approved.includes(c.id)){
-          approved=approved.filter(x=>x!==c.id);
-        }else{
-          approved.push(c.id);
-        }
-        localStorage.setItem('approvedCourses',JSON.stringify(approved));
-        render();
-      };
-      col.appendChild(div);
-    });
-    grid.appendChild(col);
+ grid.innerHTML='';
+ Object.keys(courses).forEach((s,i)=>{
+  const col=document.createElement('div');
+  col.className='column';
+  col.innerHTML=`<h2>Semestre ${i+1}</h2>`;
+  courses[s].forEach(c=>{
+   const div=document.createElement('div');
+   const locked=c.req && !c.req.every(r=>approved.includes(r));
+   div.className='course'+(approved.includes(c.id)?' approved':'')+(locked?' locked tooltip':'');
+   div.textContent=c.name;
+   if(locked){div.dataset.tip='Falta aprobar: '+c.req.filter(r=>!approved.includes(r)).join(', ')}
+   div.onclick=()=>{if(locked)return;approved.includes(c.id)?approved=approved.filter(x=>x!==c.id):approved.push(c.id);localStorage.setItem('approvedCourses',JSON.stringify(approved));render()};
+   col.appendChild(div);
   });
+  grid.appendChild(col);
+ });
 }
-
 render();
 </script>
-
 </body>
 </html>
