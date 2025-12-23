@@ -2,9 +2,14 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Malla – Ingeniería Eléctrica UNAL</title>
+<title>Malla Curricular – Ingeniería Eléctrica UNAL</title>
 
+<!-- ===================== -->
+<!--        ESTILOS        -->
+<!-- ===================== -->
 <style>
+
+/* ---------- VARIABLES DE COLOR ---------- */
 :root{
  --fund:#e6dcfa;
  --disc:#d8f3ee;
@@ -14,8 +19,12 @@
  --text:#1f2937;
 }
 
-*{box-sizing:border-box}
+/* ---------- RESET BÁSICO ---------- */
+*{
+ box-sizing:border-box;
+}
 
+/* ---------- ESTILO GENERAL ---------- */
 body{
  margin:0;
  font-family:'Inter','Segoe UI',system-ui,sans-serif;
@@ -25,17 +34,18 @@ body{
 
 h1{
  text-align:center;
- margin:20px 0 10px;
+ margin:20px 0;
  font-weight:600;
 }
 
-/* CONTENEDOR SUPERIOR */
+/* ---------- CONTENEDOR SUPERIOR ---------- */
 .dashboard{
  max-width:1200px;
- margin:0 auto;
+ margin:auto;
  padding:15px;
 }
 
+/* ---------- CAJAS SUPERIORES ---------- */
 .summary{
  display:grid;
  grid-template-columns:2fr 1fr;
@@ -49,7 +59,7 @@ h1{
  box-shadow:0 8px 24px rgba(0,0,0,.06);
 }
 
-/* CONTADOR GRANDE */
+/* ---------- CONTADOR DE CRÉDITOS ---------- */
 .big-counter{
  font-size:32px;
  font-weight:700;
@@ -61,14 +71,13 @@ h1{
  color:#6b7280;
 }
 
-/* PROGRESO */
+/* ---------- BARRAS DE PROGRESO ---------- */
 .progress-group{
  margin-bottom:14px;
 }
 .progress-group small{
  font-weight:600;
 }
-
 .bar{
  height:10px;
  background:#e5e7eb;
@@ -76,13 +85,12 @@ h1{
  overflow:hidden;
  margin-top:6px;
 }
-
 .bar span{
  display:block;
  height:100%;
 }
 
-/* LEYENDA */
+/* ---------- LEYENDA ---------- */
 .legend{
  display:flex;
  gap:10px;
@@ -94,19 +102,19 @@ h1{
  font-size:12px;
 }
 
-/* BOTÓN */
+/* ---------- BOTÓN ---------- */
 button{
  border:none;
  padding:10px 18px;
  border-radius:14px;
  background:#ef4444;
- color:#fff;
+ color:white;
  cursor:pointer;
  font-weight:600;
 }
 button:hover{opacity:.9}
 
-/* MALLA */
+/* ---------- MALLA ---------- */
 .grid{
  max-width:1200px;
  margin:20px auto;
@@ -116,6 +124,7 @@ button:hover{opacity:.9}
  gap:14px;
 }
 
+/* ---------- SEMESTRES ---------- */
 .semester{
  background:var(--card);
  border-radius:20px;
@@ -130,38 +139,52 @@ button:hover{opacity:.9}
  font-weight:600;
 }
 
+/* ---------- MATERIAS (MISMO TAMAÑO) ---------- */
 .course{
+ height:78px;                /* MISMO TAMAÑO PARA TODAS */
  border-radius:16px;
  padding:10px;
  margin-bottom:8px;
  font-size:12px;
  cursor:pointer;
- position:relative;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
  transition:.2s;
+ position:relative;
 }
 
-.course:hover{transform:translateY(-2px)}
+.course:hover{
+ transform:translateY(-2px);
+}
 
+/* ---------- APROBADA ---------- */
 .course.approved{
  text-decoration:line-through;
  opacity:.85;
 }
 
+/* ---------- BLOQUEADA ---------- */
+.course.locked{
+ cursor:not-allowed;
+}
 .course.locked::after{
- content:"Bloqueada";
+ content:attr(data-tip);
  position:absolute;
  inset:0;
- background:rgba(255,255,255,.8);
+ background:rgba(255,255,255,.85);
  display:flex;
  align-items:center;
  justify-content:center;
+ text-align:center;
  border-radius:16px;
  font-size:11px;
  font-weight:600;
  color:#555;
+ padding:6px;
 }
 
-/* COLORES COMPONENTES */
+/* ---------- COLORES POR COMPONENTE ---------- */
 .fund{background:var(--fund)}
 .disc{background:var(--disc)}
 .libre{background:var(--libre)}
@@ -179,10 +202,16 @@ button:hover{opacity:.9}
 
 <h1>Malla Curricular – Ingeniería Eléctrica (UNAL)</h1>
 
+<!-- ===================== -->
+<!--      PANEL SUPERIOR   -->
+<!-- ===================== -->
 <div class="dashboard">
  <div class="summary">
+
+  <!-- CONTADOR Y BARRAS -->
   <div class="box" id="stats"></div>
 
+  <!-- LEYENDA Y RESET -->
   <div class="box">
    <div class="legend">
     <div style="background:var(--fund)">Fundamentación</div>
@@ -192,16 +221,24 @@ button:hover{opacity:.9}
    <br>
    <button onclick="resetAll()">Restablecer progreso</button>
   </div>
+
  </div>
 </div>
 
+<!-- ===================== -->
+<!--        MALLA          -->
+<!-- ===================== -->
 <div class="grid" id="grid"></div>
 
 <div class="footer">
- Haz clic en una materia para marcarla como aprobada · El progreso se guarda automáticamente
+ Clic para aprobar materias · Se guarda automáticamente
 </div>
 
 <script>
+
+/* ===================== */
+/*     DATOS DE MALLA    */
+/* ===================== */
 const data=[
 {sem:1,id:'1000004',name:'Cálculo Diferencial'},
 {sem:1,id:'1000008',name:'Geometría Vectorial y Analítica'},
@@ -245,75 +282,114 @@ const data=[
 
 {sem:10,id:'3010662',name:'Máquinas Eléctricas II',req:['3010661']},
 {sem:10,id:'3010529',name:'Sistemas de Generación de Energía Eléctrica',req:['3010662','3010478']}
-];
+];;
 
-let done=JSON.parse(localStorage.getItem('ie_done')||'[]');
-const grid=document.getElementById('grid');
-const stats=document.getElementById('stats');
+/* ===================== */
+/*   ESTADO (localStorage) */
+/* ===================== */
+let done = JSON.parse(localStorage.getItem('ie_done') || '[]');
 
+/* ===================== */
+/*   FUNCIONES DE CÁLCULO */
+/* ===================== */
 function calc(type){
- const total=data.filter(x=>x.t===type).reduce((s,x)=>s+x.c,0);
- const d=data.filter(x=>x.t===type && done.includes(x.id)).reduce((s,x)=>s+x.c,0);
- return {d,total,p:Math.round(d/total*100)||0}
+ const total = data.filter(x=>x.t===type).reduce((s,x)=>s+x.c,0);
+ const d = data.filter(x=>x.t===type && done.includes(x.id)).reduce((s,x)=>s+x.c,0);
+ return {d,total,p:Math.round(d/total*100)||0};
 }
 
+/* ===================== */
+/*     RENDER PRINCIPAL   */
+/* ===================== */
 function render(){
+ const grid=document.getElementById('grid');
+ const stats=document.getElementById('stats');
  grid.innerHTML='';
+
  const f=calc('fund'), d=calc('disc'), l=calc('libre');
  const totalDone=f.d+d.d+l.d;
  const totalAll=data.reduce((s,x)=>s+x.c,0);
 
+ /* CONTADOR Y BARRAS */
  stats.innerHTML=`
- <div class="big-counter">
-  ${totalDone} <span>/ ${totalAll} créditos</span>
- </div>
+  <div class="big-counter">
+   ${totalDone} <span>/ ${totalAll} créditos</span>
+  </div>
 
- <div class="progress-group">
-  <small>Fundamentación ${f.p}%</small>
-  <div class="bar"><span style="width:${f.p}%;background:#9b87d4"></span></div>
- </div>
+  <div class="progress-group">
+   <small>Fundamentación ${f.p}%</small>
+   <div class="bar"><span style="width:${f.p}%;background:#9b87d4"></span></div>
+  </div>
 
- <div class="progress-group">
-  <small>Disciplinar ${d.p}%</small>
-  <div class="bar"><span style="width:${d.p}%;background:#55c9b2"></span></div>
- </div>
+  <div class="progress-group">
+   <small>Disciplinar ${d.p}%</small>
+   <div class="bar"><span style="width:${d.p}%;background:#55c9b2"></span></div>
+  </div>
 
- <div class="progress-group">
-  <small>Libre Elección ${l.p}%</small>
-  <div class="bar"><span style="width:${l.p}%;background:#f2c14e"></span></div>
- </div>
+  <div class="progress-group">
+   <small>Libre Elección ${l.p}%</small>
+   <div class="bar"><span style="width:${l.p}%;background:#f2c14e"></span></div>
+  </div>
  `;
 
- for(let s=1;s<=10;s++){
+ /* SEMESTRES */
+ for(let s=1;s<=4;s++){
   const col=document.createElement('div');
   col.className='semester';
   col.innerHTML=`<h3>Semestre ${s}</h3>`;
+
   data.filter(x=>x.sem===s).forEach(c=>{
-   const locked=c.fund && f.p<c.fund;
+   let locked=false;
+   let tip='';
+
+   /* PRERREQUISITOS POR MATERIA */
+   if(c.req && !c.req.every(r=>done.includes(r))){
+    locked=true;
+    tip='Faltan prerrequisitos';
+   }
+
+   /* PRERREQUISITO POR % FUNDAMENTACIÓN */
+   if(c.fundPercent && f.p < c.fundPercent){
+    locked=true;
+    tip=`Requiere ${c.fundPercent}% de Fundamentación`;
+   }
+
    const div=document.createElement('div');
    div.className=`course ${c.t} ${done.includes(c.id)?'approved':''} ${locked?'locked':''}`;
+   div.dataset.tip=tip;
    div.innerHTML=`<b>${c.n}</b><br>${c.c} créditos`;
+
    div.onclick=()=>{
     if(locked)return;
-    done.includes(c.id)?done=done.filter(x=>x!==c.id):done.push(c.id);
+    done.includes(c.id)
+     ? done=done.filter(x=>x!==c.id)
+     : done.push(c.id);
     localStorage.setItem('ie_done',JSON.stringify(done));
     render();
    };
+
    col.appendChild(div);
   });
+
   grid.appendChild(col);
  }
 }
 
+/* ===================== */
+/*      RESET TOTAL       */
+/* ===================== */
 function resetAll(){
  done=[];
  localStorage.removeItem('ie_done');
  render();
 }
 
+/* ===================== */
+/*      INICIO            */
+/* ===================== */
 render();
-</script>
 
+</script>
 </body>
 </html>
 
