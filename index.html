@@ -9,6 +9,7 @@ body{
  margin:0;
  font-family:'Segoe UI',system-ui,sans-serif;
  background:#f4f6f9;
+ color:#2c3e50;
 }
 
 h1{text-align:center;margin:12px}
@@ -19,9 +20,8 @@ h1{text-align:center;margin:12px}
  align-items:center;
  padding:10px 20px;
  gap:15px;
+ flex-wrap:wrap;
 }
-
-.stats{font-size:13px;line-height:1.6}
 
 button{
  padding:6px 14px;
@@ -105,6 +105,7 @@ button{
  font-size:12px;
  cursor:pointer;
  transition:.2s;
+ position:relative;
 }
 
 .course:hover{transform:scale(1.03)}
@@ -122,16 +123,18 @@ button{
 .course.locked:hover::after{
  content:attr(data-tip);
  position:absolute;
+ left:0;
+ top:100%;
  background:#333;
  color:#fff;
  font-size:11px;
  padding:5px 7px;
  border-radius:6px;
  white-space:nowrap;
- margin-top:4px;
+ z-index:10;
 }
 
-/* COLORES DE LAS MATERIAS */
+/* COLORES */
 .course.fund{background:#eadcf7}
 .course.disc{background:#d7f3ee}
 .course.libre{background:#fff0c9}
@@ -150,7 +153,6 @@ button{
 <h1>Malla Curricular – Ingeniería Eléctrica (UNAL)</h1>
 
 <div class="top">
- <div class="stats" id="stats"></div>
  <button onclick="resetProgress()">Restablecer</button>
  <div class="legend">
   <span><div class="box fund-bg"></div>Fundamentación</span>
@@ -160,52 +162,98 @@ button{
 </div>
 
 <div class="progress-section">
- <div class="progress-card">
-  Fundamentación <b id="pf">0%</b>
+ <div class="progress-card">Fundamentación <b id="pf"></b>
   <div class="progress-bar"><div id="pfb" class="progress-fill fund-fill"></div></div>
  </div>
- <div class="progress-card">
-  Disciplinar <b id="pd">0%</b>
+ <div class="progress-card">Disciplinar <b id="pd"></b>
   <div class="progress-bar"><div id="pdb" class="progress-fill disc-fill"></div></div>
  </div>
- <div class="progress-card">
-  Libre Elección <b id="pl">0%</b>
+ <div class="progress-card">Libre <b id="pl"></b>
   <div class="progress-bar"><div id="plb" class="progress-fill libre-fill"></div></div>
  </div>
- <div class="progress-card">
-  Total <b id="pt">0%</b>
+ <div class="progress-card">Total <b id="pt"></b>
   <div class="progress-bar"><div id="ptb" class="progress-fill total-fill"></div></div>
  </div>
 </div>
 
 <div class="container" id="malla"></div>
 
-<div class="footer">
- Clic para aprobar · Progreso automático · Guardado local
-</div>
+<div class="footer">Clic para aprobar · Bloqueo automático · Guardado local</div>
 
 <script>
 const data=[
- {sem:1,id:'CD',name:'Cálculo Diferencial',cred:4,comp:'fund'},
- {sem:1,id:'GV',name:'Geometría Vectorial',cred:4,comp:'fund'},
- {sem:1,id:'IE',name:'Introducción a Ing. Eléctrica',cred:2,comp:'disc'},
- {sem:1,id:'LE1',name:'Libre Elección',cred:3,comp:'libre'},
+/* SEM 1 */
+{sem:1,id:'CD',name:'Cálculo Diferencial',cred:4,comp:'fund'},
+{sem:1,id:'GV',name:'Geometría Vectorial',cred:4,comp:'fund'},
+{sem:1,id:'IE',name:'Introducción a la Ing. Eléctrica',cred:2,comp:'disc'},
+{sem:1,id:'LE1',name:'Libre Elección',cred:3,comp:'libre'},
+{sem:1,id:'LE2',name:'Libre Elección',cred:3,comp:'libre'},
 
- {sem:2,id:'CI',name:'Cálculo Integral',cred:4,comp:'fund',req:['CD']},
- {sem:2,id:'AL',name:'Álgebra Lineal',cred:4,comp:'fund'},
- {sem:2,id:'FIS1',name:'Física Mecánica',cred:4,comp:'fund'},
+/* SEM 2 */
+{sem:2,id:'CI',name:'Cálculo Integral',cred:4,comp:'fund',req:['CD']},
+{sem:2,id:'AL',name:'Álgebra Lineal',cred:4,comp:'fund',req:['GV']},
+{sem:2,id:'FM',name:'Física Mecánica',cred:4,comp:'fund',req:['CD','GV']},
+{sem:2,id:'AC1',name:'Circuitos Eléctricos I',cred:3,comp:'disc',req:['CD']},
+{sem:2,id:'LE3',name:'Libre Elección',cred:3,comp:'libre'},
 
- {sem:4,id:'LABC',name:'Laboratorio de Circuitos',cred:3,comp:'disc',fundPercent:40},
+/* SEM 3 */
+{sem:3,id:'CVV',name:'Cálculo Varias Variables',cred:4,comp:'fund',req:['CI']},
+{sem:3,id:'ED',name:'Ecuaciones Diferenciales',cred:4,comp:'fund',req:['CI','AL']},
+{sem:3,id:'FEM',name:'Electricidad y Magnetismo',cred:4,comp:'fund',req:['FM','CI']},
+{sem:3,id:'PROG',name:'Fundamentos de Programación',cred:3,comp:'fund'},
+{sem:3,id:'TERMO',name:'Termodinámica',cred:3,comp:'disc'},
+
+/* SEM 4 */
+{sem:4,id:'EST',name:'Estadística I',cred:3,comp:'fund',req:['CI']},
+{sem:4,id:'MATESP',name:'Matemáticas Especiales',cred:4,comp:'fund',req:['ED']},
+{sem:4,id:'NUM',name:'Métodos Numéricos',cred:4,comp:'fund',req:['CI','AL']},
+{sem:4,id:'AC2',name:'Circuitos Eléctricos II',cred:3,comp:'disc',req:['AC1','ED']},
+{sem:4,id:'LABC',name:'Laboratorio de Circuitos',cred:1,comp:'disc',req:['AC2'],fundPercent:40},
+
+/* SEM 5 */
+{sem:5,id:'SSL',name:'Señales y Sistemas',cred:3,comp:'disc',req:['MATESP']},
+{sem:5,id:'EM',name:'Electromagnetismo',cred:3,comp:'disc',req:['FEM']},
+{sem:5,id:'EA',name:'Electrónica Análoga I',cred:3,comp:'disc',req:['AC2']},
+{sem:5,id:'LE4',name:'Libre Elección',cred:3,comp:'libre'},
+
+/* SEM 6 */
+{sem:6,id:'LT',name:'Líneas de Transmisión',cred:3,comp:'disc',req:['CVV','MATESP','EM']},
+{sem:6,id:'CTRL',name:'Control',cred:3,comp:'disc',req:['SSL']},
+{sem:6,id:'ME1',name:'Máquinas Eléctricas I',cred:3,comp:'disc',req:['EM']},
+{sem:6,id:'EDIG',name:'Electrónica Digital',cred:3,comp:'disc',req:['EA']},
+
+/* SEM 7 */
+{sem:7,id:'INST',name:'Instalaciones Eléctricas',cred:3,comp:'disc',req:['ME1','LT']},
+{sem:7,id:'ME2',name:'Máquinas Eléctricas II',cred:3,comp:'disc',req:['ME1']},
+{sem:7,id:'TEL',name:'Telecomunicaciones',cred:3,comp:'disc',req:['SSL','EDIG']},
+{sem:7,id:'OD1',name:'Optativa Disciplinar',cred:3,comp:'disc'},
+
+/* SEM 8 */
+{sem:8,id:'LABM',name:'Lab. Máquinas Eléctricas',cred:2,comp:'disc',req:['ME2']},
+{sem:8,id:'GEN',name:'Generación de Energía',cred:3,comp:'disc',req:['ME2']},
+{sem:8,id:'POT',name:'Sistemas de Potencia',cred:3,comp:'disc',req:['ME2','TERMO']},
+{sem:8,id:'AUTO',name:'Automatización',cred:3,comp:'disc',req:['EDIG']},
+{sem:8,id:'LE5',name:'Libre Elección',cred:3,comp:'libre'},
+
+/* SEM 9 */
+{sem:9,id:'RED',name:'Redes de Transmisión',cred:3,comp:'disc',req:['POT']},
+{sem:9,id:'PROT',name:'Protecciones Eléctricas',cred:3,comp:'disc',req:['POT']},
+{sem:9,id:'OD2',name:'Optativa Disciplinar',cred:3,comp:'disc'},
+{sem:9,id:'LE6',name:'Libre Elección',cred:3,comp:'libre'},
+
+/* SEM 10 */
+{sem:10,id:'TG',name:'Trabajo de Grado',cred:6,comp:'disc'},
+{sem:10,id:'LE7',name:'Libre Elección',cred:3,comp:'libre'},
+{sem:10,id:'LE8',name:'Libre Elección',cred:3,comp:'libre'},
+{sem:10,id:'LE9',name:'Libre Elección',cred:4,comp:'libre'},
 ];
 
-let approved=JSON.parse(localStorage.getItem('ie_aprobadas')||'[]');
-const malla=document.getElementById('malla');
-const stats=document.getElementById('stats');
+let approved=JSON.parse(localStorage.getItem('ie_unal')||'[]');
 
 function calc(comp){
  const total=data.filter(c=>c.comp===comp).reduce((s,c)=>s+c.cred,0);
  const done=data.filter(c=>c.comp===comp && approved.includes(c.id)).reduce((s,c)=>s+c.cred,0);
- return {done,total,p:total?Math.round(done/total*100):0};
+ return {done,total,p:Math.round(done/total*100)||0};
 }
 
 function render(){
@@ -214,13 +262,6 @@ function render(){
  const totalDone=f.done+d.done+l.done;
  const totalAll=data.reduce((s,c)=>s+c.cred,0);
  const tp=Math.round(totalDone/totalAll*100);
-
- stats.innerHTML=`
- <b>Fundamentación:</b> ${f.done}/${f.total} (${f.p}%)<br>
- <b>Disciplinar:</b> ${d.done}/${d.total} (${d.p}%)<br>
- <b>Libre:</b> ${l.done}/${l.total} (${l.p}%)<br>
- <b>Total:</b> ${totalDone} créditos
- `;
 
  pf.textContent=f.p+'%'; pfb.style.width=f.p+'%';
  pd.textContent=d.p+'%'; pdb.style.width=d.p+'%';
@@ -231,44 +272,36 @@ function render(){
   const col=document.createElement('div');
   col.className='semester';
   col.innerHTML=`<h2>Semestre ${s}</h2>`;
-
   data.filter(c=>c.sem===s).forEach(c=>{
    let locked=false,tip='';
    if(c.req && !c.req.every(r=>approved.includes(r))){
     locked=true; tip='Faltan prerrequisitos';
    }
    if(c.fundPercent && f.p<c.fundPercent){
-    locked=true; tip=`Requiere ${c.fundPercent}% Fundamentación`;
+    locked=true; tip='Requiere 40% Fundamentación';
    }
-
    const d=document.createElement('div');
    d.className=`course ${c.comp} ${approved.includes(c.id)?'approved':''} ${locked?'locked':''}`;
    d.innerHTML=`<b>${c.name}</b><br><small>${c.cred} créditos</small>`;
    if(locked) d.dataset.tip=tip;
-
    d.onclick=()=>{
-    if(locked) return;
-    approved.includes(c.id)
-     ? approved=approved.filter(x=>x!==c.id)
-     : approved.push(c.id);
-    localStorage.setItem('ie_aprobadas',JSON.stringify(approved));
+    if(locked)return;
+    approved.includes(c.id)?approved=approved.filter(x=>x!==c.id):approved.push(c.id);
+    localStorage.setItem('ie_unal',JSON.stringify(approved));
     render();
    };
-
    col.appendChild(d);
   });
   malla.appendChild(col);
  }
 }
-
 function resetProgress(){
- if(confirm('¿Restablecer todo el progreso?')){
+ if(confirm('¿Restablecer progreso?')){
   approved=[];
-  localStorage.removeItem('ie_aprobadas');
+  localStorage.removeItem('ie_unal');
   render();
  }
 }
-
 render();
 </script>
 </body>
