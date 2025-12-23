@@ -5,80 +5,119 @@
 <title>Malla Curricular – Ingeniería Eléctrica UNAL</title>
 <style>
 body{margin:0;font-family:'Segoe UI',system-ui,sans-serif;background:#f4f6f9;color:#2c3e50}
-h1{text-align:center;margin:20px 0}
-.container{display:grid;grid-template-columns:repeat(10,1fr);gap:12px;padding:20px}
+h1{text-align:center;margin:15px 0}
+#contador{text-align:center;font-size:14px;margin-bottom:10px;color:#2c3e50}
+.container{display:grid;grid-template-columns:repeat(10,1fr);gap:12px;padding:15px}
 .semester{background:#fff;border-radius:14px;box-shadow:0 4px 10px rgba(0,0,0,.08);padding:10px}
 .semester h2{text-align:center;font-size:14px;margin:6px 0 10px;color:#34495e}
-.course{background:#e9f0fa;border-radius:10px;padding:8px;margin-bottom:8px;font-size:12px;cursor:pointer;transition:.2s;position:relative}
+.course{border-radius:10px;padding:8px;margin-bottom:8px;font-size:12px;cursor:pointer;transition:.2s;position:relative}
 .course:hover{transform:scale(1.02)}
-.course.approved{background:#c8eed4;text-decoration:line-through}
-.course.locked{background:#f0f0f0;color:#aaa;cursor:not-allowed}
+.course.approved{text-decoration:line-through;opacity:.85}
+.course.locked{background:#f0f0f0!important;color:#aaa;cursor:not-allowed}
 .course.locked:hover::after{content:attr(data-tip);position:absolute;left:0;top:105%;background:#333;color:#fff;font-size:11px;padding:5px 7px;border-radius:6px;white-space:nowrap;z-index:10}
-.footer{text-align:center;font-size:12px;color:#777;margin-bottom:20px}
+.fund{background:#e5d7f2}
+.disc{background:#d2f0ea}
+.libre{background:#ffe4a8}
+.footer{text-align:center;font-size:12px;color:#777;margin:15px}
 </style>
 </head>
 <body>
 <h1>Malla Curricular Interactiva – Ingeniería Eléctrica (UNAL)</h1>
+<div id="contador"></div>
 <div class="container" id="malla"></div>
-<div class="footer">Haz clic en una asignatura para marcarla como aprobada · El progreso se guarda automáticamente</div>
+<div class="footer">Clic para aprobar · Verde = aprobada · Gris = bloqueada · Colores según componente</div>
 <script>
 const data=[
-{sem:1,id:'1000004',name:'Cálculo Diferencial'},
-{sem:1,id:'1000008',name:'Geometría Vectorial y Analítica'},
-{sem:1,id:'3009531',name:'Introducción a la Ingeniería Eléctrica'},
+// sem, id, nombre, creditos, componente, requisitos
+{sem:1,id:'1000004',name:'Cálculo Diferencial',cred:4,comp:'fund'},
+{sem:1,id:'1000008',name:'Geometría Vectorial y Analítica',cred:4,comp:'fund'},
+{sem:1,id:'3009531',name:'Introducción a la Ingeniería Eléctrica',cred:2,comp:'disc'},
+{sem:1,id:'LE1',name:'Libre Elección',cred:3,comp:'libre'},
+{sem:1,id:'LE2',name:'Libre Elección',cred:3,comp:'libre'},
 
-{sem:2,id:'1000005',name:'Cálculo Integral',req:['1000004']},
-{sem:2,id:'1000003',name:'Álgebra Lineal',req:['1000008']},
-{sem:2,id:'1000019',name:'Física Mecánica',req:['1000004','1000008']},
+{sem:2,id:'1000005',name:'Cálculo Integral',cred:4,comp:'fund',req:['1000004']},
+{sem:2,id:'1000003',name:'Álgebra Lineal',cred:4,comp:'fund',req:['1000008']},
+{sem:2,id:'1000019',name:'Física Mecánica',cred:4,comp:'fund',req:['1000004','1000008']},
+{sem:2,id:'3010481',name:'Análisis de Circuitos Eléctricos I',cred:3,comp:'disc',req:['1000004']},
+{sem:2,id:'LE3',name:'Libre Elección',cred:3,comp:'libre'},
 
-{sem:3,id:'1000006',name:'Cálculo en Varias Variables',req:['1000005']},
-{sem:3,id:'1000007',name:'Ecuaciones Diferenciales',req:['1000005','1000003']},
-{sem:3,id:'1000017',name:'Física de Electricidad y Magnetismo',req:['1000019','1000005']},
+{sem:3,id:'1000006',name:'Cálculo en Varias Variables',cred:4,comp:'fund',req:['1000005']},
+{sem:3,id:'1000007',name:'Ecuaciones Diferenciales',cred:4,comp:'fund',req:['1000005','1000003']},
+{sem:3,id:'1000017',name:'Física Electricidad y Magnetismo',cred:4,comp:'fund',req:['1000019','1000005']},
+{sem:3,id:'3010435',name:'Fundamentos de Programación',cred:3,comp:'fund'},
+{sem:3,id:'3010478',name:'Termodinámica General',cred:3,comp:'disc'},
 
-{sem:4,id:'3006905',name:'Matemáticas Especiales',req:['1000007']},
-{sem:4,id:'3010651',name:'Estadística I',req:['1000005']},
-{sem:4,id:'3010478',name:'Termodinámica General',req:['1000019']},
+{sem:4,id:'3010651',name:'Estadística I',cred:3,comp:'fund',req:['1000005']},
+{sem:4,id:'3006905',name:'Matemáticas Especiales',cred:4,comp:'fund',req:['1000007']},
+{sem:4,id:'3006907',name:'Métodos Numéricos',cred:4,comp:'fund',req:['1000005','1000003']},
+{sem:4,id:'3010496',name:'Análisis de Circuitos Eléctricos II',cred:3,comp:'disc',req:['3010481','1000007']},
+{sem:4,id:'3007756',name:'Laboratorio de Circuitos',cred:1,comp:'disc',req:['3010496'],fundPercent:40},
 
-{sem:5,id:'3010481',name:'Análisis de Circuitos Eléctricos I',req:['1000004']},
-{sem:5,id:'3010435',name:'Fundamentos de Programación'},
-{sem:5,id:'3006907',name:'Métodos Numéricos',req:['1000005','1000003']},
+{sem:5,id:'3010421',name:'Señales y Sistemas Lineales',cred:3,comp:'disc',req:['3006905']},
+{sem:5,id:'3010520',name:'Teoría Electromagnética',cred:3,comp:'disc',req:['1000017']},
+{sem:5,id:'3010458',name:'Electrónica Análoga I',cred:3,comp:'disc',req:['3010496']},
+{sem:5,id:'LE4',name:'Libre Elección',cred:3,comp:'libre'},
 
-{sem:6,id:'3010496',name:'Análisis de Circuitos Eléctricos II',req:['3010481','1000007']},
-{sem:6,id:'3007756',name:'Laboratorio de Circuitos',req:['3010496']},
-{sem:6,id:'3010520',name:'Teoría Electromagnética',req:['1000017']},
+{sem:6,id:'3010490',name:'Modelado de Líneas de Transmisión',cred:3,comp:'disc',req:['1000006','3006905','3010520']},
+{sem:6,id:'3010402',name:'Control Entrada-Salida',cred:3,comp:'disc',req:['3010421']},
+{sem:6,id:'3010661',name:'Máquinas Eléctricas I',cred:3,comp:'disc',req:['3010520']},
+{sem:6,id:'3010483',name:'Electrónica Digital',cred:3,comp:'disc',req:['3010458']},
 
-{sem:7,id:'3010421',name:'Señales y Sistemas Lineales',req:['3006905']},
-{sem:7,id:'3010402',name:'Control Entrada-Salida',req:['3010421']},
-{sem:7,id:'3010458',name:'Electrónica Análoga I',req:['3010496','3007756']},
+{sem:7,id:'3010658',name:'Instalaciones Eléctricas',cred:3,comp:'disc',req:['3010661','3010490']},
+{sem:7,id:'3010662',name:'Máquinas Eléctricas II',cred:3,comp:'disc',req:['3010661']},
+{sem:7,id:'3010494',name:'Telecomunicaciones',cred:3,comp:'disc',req:['3010421','3010483']},
+{sem:7,id:'OD1',name:'Optativa Disciplinar',cred:3,comp:'disc'},
 
-{sem:8,id:'3010457',name:'Electrónica Análoga II',req:['3010458']},
-{sem:8,id:'3010483',name:'Electrónica Digital',req:['3010458']},
+{sem:8,id:'3010538',name:'Laboratorio de Máquinas Eléctricas',cred:2,comp:'disc',req:['3010662']},
+{sem:8,id:'3010529',name:'Sistemas de Generación de Energía Eléctrica',cred:3,comp:'disc',req:['3010662']},
+{sem:8,id:'3010497',name:'Análisis de Sistemas de Potencia',cred:3,comp:'disc',req:['3010662','3010478']},
+{sem:8,id:'3010398',name:'Automatización de Sistemas Eléctricos',cred:3,comp:'disc',req:['3010483']},
+{sem:8,id:'LE5',name:'Libre Elección',cred:3,comp:'libre'},
 
-{sem:9,id:'3010490',name:'Modelado de Líneas de Transmisión',req:['1000006','3006905','3010520']},
-{sem:9,id:'3010661',name:'Máquinas Eléctricas I',req:['3010520']},
-{sem:9,id:'3010494',name:'Telecomunicaciones',req:['3010421','3010483']},
+{sem:9,id:'3010482',name:'Diseño de Redes de Transmisión y Distribución',cred:3,comp:'disc',req:['3010497']},
+{sem:9,id:'3010492',name:'Sistemas de Protecciones Eléctricas',cred:3,comp:'disc',req:['3010497']},
+{sem:9,id:'OD2',name:'Optativa Disciplinar',cred:3,comp:'disc'},
+{sem:9,id:'LE6',name:'Libre Elección',cred:3,comp:'libre'},
 
-{sem:10,id:'3010662',name:'Máquinas Eléctricas II',req:['3010661']},
-{sem:10,id:'3010529',name:'Sistemas de Generación de Energía Eléctrica',req:['3010662','3010478']}
+{sem:10,id:'3007424',name:'Trabajo de Grado',cred:6,comp:'disc'},
+{sem:10,id:'LE7',name:'Libre Elección',cred:3,comp:'libre'},
+{sem:10,id:'LE8',name:'Libre Elección',cred:3,comp:'libre'},
+{sem:10,id:'LE9',name:'Libre Elección',cred:4,comp:'libre'}
 ];
 
 let approved=JSON.parse(localStorage.getItem('ie_unal_aprobadas')||'[]');
 const malla=document.getElementById('malla');
+const contador=document.getElementById('contador');
+
+function fundCreditsApproved(){
+ return data.filter(c=>c.comp==='fund' && approved.includes(c.id)).reduce((a,b)=>a+b.cred,0)
+}
 
 function render(){
  malla.innerHTML='';
+ const total=approved.reduce((sum,id)=>{
+  const c=data.find(x=>x.id===id);return c?sum+c.cred:sum
+ },0);
+ contador.innerHTML=`<b>Créditos aprobados:</b> ${total}`;
  for(let s=1;s<=10;s++){
   const col=document.createElement('div');
   col.className='semester';
   col.innerHTML=`<h2>Semestre ${s}</h2>`;
   data.filter(c=>c.sem===s).forEach(c=>{
-   const locked=c.req && !c.req.every(r=>approved.includes(r));
+   let locked=false; let tip='';
+   if(c.req && !c.req.every(r=>approved.includes(r))){locked=true;tip='Faltan prerrequisitos';}
+   if(c.fundPercent){
+    const fundTotal=data.filter(x=>x.comp==='fund').reduce((a,b)=>a+b.cred,0);
+    if((fundCreditsApproved()/fundTotal)*100 < c.fundPercent){
+      locked=true;tip=`Requiere ${c.fundPercent}% del componente de Fundamentación`;
+    }
+   }
    const d=document.createElement('div');
-   d.className='course'+(approved.includes(c.id)?' approved':'')+(locked?' locked':'');
-   d.textContent=c.name;
-   if(locked){d.dataset.tip='Faltan prerrequisitos'}
+   d.className=`course ${c.comp} ${(approved.includes(c.id)?'approved':'')} ${(locked?'locked':'')}`;
+   d.innerHTML=`<b>${c.name}</b><br><small>${c.cred} créditos</small>`;
+   if(locked)d.dataset.tip=tip;
    d.onclick=()=>{
-    if(locked) return;
+    if(locked)return;
     approved.includes(c.id)?approved=approved.filter(x=>x!==c.id):approved.push(c.id);
     localStorage.setItem('ie_unal_aprobadas',JSON.stringify(approved));
     render();
@@ -92,3 +131,4 @@ render();
 </script>
 </body>
 </html>
+
