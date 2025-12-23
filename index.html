@@ -2,104 +2,75 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Malla Ingeniería Eléctrica UNAL</title>
+<title>Malla Curricular – Ingeniería Eléctrica UNAL</title>
 
 <style>
 body{
  margin:0;
  font-family:'Segoe UI',system-ui,sans-serif;
  background:#f4f6f9;
- color:#2c3e50;
+ color:#2c3e50
 }
 
-h1{text-align:center;margin:12px}
+h1{text-align:center;margin:15px 0}
 
-.top{
- display:flex;
- justify-content:space-between;
- align-items:center;
- padding:10px 20px;
- gap:15px;
- flex-wrap:wrap;
-}
-
-button{
- padding:6px 14px;
- border:none;
- border-radius:8px;
- background:#e74c3c;
- color:white;
- cursor:pointer;
-}
-
-.legend{
- display:flex;
- gap:15px;
- font-size:13px;
-}
-.legend span{display:flex;align-items:center;gap:6px}
-.box{width:14px;height:14px;border-radius:4px}
-
-.fund-bg{background:#eadcf7}
-.disc-bg{background:#d7f3ee}
-.libre-bg{background:#fff0c9}
-
-.progress-section{
- display:grid;
- grid-template-columns:repeat(4,1fr);
- gap:12px;
- padding:0 20px 15px;
-}
-
-.progress-card{
- background:white;
- border-radius:12px;
+/* CONTADOR */
+.counter{
+ background:#fff;
+ margin:10px auto;
  padding:10px;
- font-size:12px;
+ width:95%;
+ max-width:1100px;
+ border-radius:12px;
  box-shadow:0 4px 10px rgba(0,0,0,.08);
+ font-size:14px
 }
 
-.progress-bar{
- height:10px;
+.progress{
+ height:8px;
  background:#e0e0e0;
  border-radius:6px;
  overflow:hidden;
- margin-top:6px;
+ margin:5px 0 10px
 }
 
-.progress-fill{
- height:100%;
- width:0%;
- transition:width .3s;
+.progress span{
+ display:block;
+ height:100%
 }
 
-.fund-fill{background:#b18be8}
-.disc-fill{background:#5fd1b2}
-.libre-fill{background:#f3c94b}
-.total-fill{background:#6aa9e9}
+/* LEYENDA */
+.legend{
+ display:flex;
+ gap:15px;
+ justify-content:center;
+ margin:10px 0
+}
+.legend div{
+ padding:6px 12px;
+ border-radius:10px;
+ font-size:12px
+}
 
-/* 🔥 CONTENEDOR CON SCROLL */
+/* MALLA */
 .container{
  display:grid;
- grid-auto-flow:column;
- grid-auto-columns:260px;
+ grid-template-columns:repeat(10,1fr);
  gap:12px;
- padding:15px;
- overflow-x:auto;
- scroll-behavior:smooth;
+ padding:15px
 }
 
 .semester{
- background:white;
+ background:#fff;
  border-radius:14px;
- padding:10px;
  box-shadow:0 4px 10px rgba(0,0,0,.08);
+ padding:10px
 }
 
 .semester h2{
- font-size:14px;
  text-align:center;
- margin:6px 0 10px;
+ font-size:14px;
+ margin:6px 0 10px
 }
 
 .course{
@@ -109,155 +80,134 @@ button{
  font-size:12px;
  cursor:pointer;
  transition:.2s;
- position:relative;
+ opacity:.85
 }
-
 .course:hover{transform:scale(1.03)}
 
 .course.approved{
  text-decoration:line-through;
- font-weight:600;
+ opacity:1
 }
 
 .course.locked{
- opacity:.4;
- cursor:not-allowed;
+ background:#ddd!important;
+ color:#aaa;
+ cursor:not-allowed
 }
 
-.course.locked:hover::after{
- content:attr(data-tip);
- position:absolute;
- left:0;
- top:100%;
- background:#333;
+/* COLORES COMPONENTES */
+.fund{background:#efe7f8}
+.disc{background:#e0f5f1}
+.libre{background:#fff1c9}
+
+/* BOTÓN */
+button{
+ border:none;
+ background:#e74c3c;
  color:#fff;
- font-size:11px;
- padding:5px 7px;
- border-radius:6px;
- white-space:nowrap;
- z-index:10;
+ padding:8px 14px;
+ border-radius:10px;
+ cursor:pointer
 }
-
-/* COLORES */
-.course.fund{background:#eadcf7}
-.course.disc{background:#d7f3ee}
-.course.libre{background:#fff0c9}
+button:hover{opacity:.9}
 
 .footer{
  text-align:center;
  font-size:12px;
  color:#777;
- margin-bottom:15px;
+ margin:15px
 }
 </style>
 </head>
 
 <body>
 
-<h1>Malla Curricular – Ingeniería Eléctrica (UNAL)</h1>
+<h1>Malla Curricular Interactiva – Ingeniería Eléctrica (UNAL)</h1>
 
-<div class="top">
- <button onclick="resetProgress()">Restablecer</button>
- <div class="legend">
-  <span><div class="box fund-bg"></div>Fundamentación</span>
-  <span><div class="box disc-bg"></div>Disciplinar</span>
-  <span><div class="box libre-bg"></div>Libre</span>
- </div>
+<div class="counter" id="counter"></div>
+
+<div class="legend">
+ <div class="fund">Fundamentación</div>
+ <div class="disc">Disciplinar</div>
+ <div class="libre">Libre Elección</div>
 </div>
 
-<div class="progress-section">
- <div class="progress-card">Fundamentación <b id="pf"></b>
-  <div class="progress-bar"><div id="pfb" class="progress-fill fund-fill"></div></div>
- </div>
- <div class="progress-card">Disciplinar <b id="pd"></b>
-  <div class="progress-bar"><div id="pdb" class="progress-fill disc-fill"></div></div>
- </div>
- <div class="progress-card">Libre <b id="pl"></b>
-  <div class="progress-bar"><div id="plb" class="progress-fill libre-fill"></div></div>
- </div>
- <div class="progress-card">Total <b id="pt"></b>
-  <div class="progress-bar"><div id="ptb" class="progress-fill total-fill"></div></div>
- </div>
+<div style="text-align:center">
+ <button onclick="resetAll()">Restablecer créditos</button>
 </div>
 
 <div class="container" id="malla"></div>
 
-<div class="footer">Clic para aprobar · Scroll horizontal · Guardado local</div>
+<div class="footer">
+ Clic para aprobar materias · Avances guardados automáticamente
+</div>
 
 <script>
 const data=[
-/* SEM 1 */
-{sem:1,id:'CD',name:'Cálculo Diferencial',cred:4,comp:'fund'},
-{sem:1,id:'GV',name:'Geometría Vectorial',cred:4,comp:'fund'},
-{sem:1,id:'IE',name:'Introducción a Ing. Eléctrica',cred:2,comp:'disc'},
-{sem:1,id:'LE1',name:'Libre Elección',cred:3,comp:'libre'},
-{sem:1,id:'LE2',name:'Libre Elección',cred:3,comp:'libre'},
+{sem:1,id:'c1',name:'Cálculo Diferencial',cred:4,comp:'fund'},
+{sem:1,id:'c2',name:'Geometría Vectorial',cred:4,comp:'fund'},
+{sem:1,id:'c3',name:'Intro Ing. Eléctrica',cred:2,comp:'disc'},
+{sem:1,id:'c4',name:'Libre Elección',cred:3,comp:'libre'},
+{sem:1,id:'c5',name:'Libre Elección',cred:3,comp:'libre'},
 
-/* SEM 2 */
-{sem:2,id:'CI',name:'Cálculo Integral',cred:4,comp:'fund',req:['CD']},
-{sem:2,id:'AL',name:'Álgebra Lineal',cred:4,comp:'fund',req:['GV']},
-{sem:2,id:'FM',name:'Física Mecánica',cred:4,comp:'fund',req:['CD','GV']},
-{sem:2,id:'AC1',name:'Circuitos Eléctricos I',cred:3,comp:'disc',req:['CD']},
-{sem:2,id:'LE3',name:'Libre Elección',cred:3,comp:'libre'},
+{sem:2,id:'c6',name:'Cálculo Integral',cred:4,comp:'fund',req:['c1']},
+{sem:2,id:'c7',name:'Álgebra Lineal',cred:4,comp:'fund',req:['c2']},
+{sem:2,id:'c8',name:'Física Mecánica',cred:4,comp:'fund'},
+{sem:2,id:'c9',name:'Circuitos I',cred:3,comp:'disc'},
+{sem:2,id:'c10',name:'Libre Elección',cred:3,comp:'libre'},
 
-/* SEM 3 */
-{sem:3,id:'CVV',name:'Cálculo Varias Variables',cred:4,comp:'fund',req:['CI']},
-{sem:3,id:'ED',name:'Ecuaciones Diferenciales',cred:4,comp:'fund',req:['CI','AL']},
-{sem:3,id:'FEM',name:'Electricidad y Magnetismo',cred:4,comp:'fund',req:['FM','CI']},
-{sem:3,id:'PROG',name:'Fundamentos de Programación',cred:3,comp:'fund'},
-{sem:3,id:'TERMO',name:'Termodinámica',cred:3,comp:'disc'},
+{sem:3,id:'c11',name:'Cálculo Multivariable',cred:4,comp:'fund'},
+{sem:3,id:'c12',name:'Ecuaciones Diferenciales',cred:4,comp:'fund'},
+{sem:3,id:'c13',name:'Electricidad y Magnetismo',cred:4,comp:'fund'},
+{sem:3,id:'c14',name:'Programación',cred:3,comp:'fund'},
+{sem:3,id:'c15',name:'Termodinámica',cred:3,comp:'disc'},
 
-/* SEM 4 */
-{sem:4,id:'EST',name:'Estadística I',cred:3,comp:'fund',req:['CI']},
-{sem:4,id:'MATESP',name:'Matemáticas Especiales',cred:4,comp:'fund',req:['ED']},
-{sem:4,id:'NUM',name:'Métodos Numéricos',cred:4,comp:'fund',req:['CI','AL']},
-{sem:4,id:'AC2',name:'Circuitos Eléctricos II',cred:3,comp:'disc',req:['AC1','ED']},
-{sem:4,id:'LABC',name:'Laboratorio de Circuitos',cred:1,comp:'disc',req:['AC2'],fundPercent:40},
+{sem:4,id:'c16',name:'Estadística I',cred:3,comp:'fund'},
+{sem:4,id:'c17',name:'Matemáticas Especiales',cred:4,comp:'fund'},
+{sem:4,id:'c18',name:'Métodos Numéricos',cred:4,comp:'fund'},
+{sem:4,id:'c19',name:'Circuitos II',cred:3,comp:'disc'},
+{sem:4,id:'c20',name:'Lab. Circuitos',cred:1,comp:'disc',fundPercent:40},
 
-/* SEM 5 */
-{sem:5,id:'SSL',name:'Señales y Sistemas',cred:3,comp:'disc',req:['MATESP']},
-{sem:5,id:'EM',name:'Electromagnetismo',cred:3,comp:'disc',req:['FEM']},
-{sem:5,id:'EA',name:'Electrónica Análoga I',cred:3,comp:'disc',req:['AC2']},
-{sem:5,id:'LE4',name:'Libre Elección',cred:3,comp:'libre'},
+{sem:5,id:'c21',name:'Señales y Sistemas',cred:3,comp:'disc'},
+{sem:5,id:'c22',name:'Electromagnetismo',cred:3,comp:'disc'},
+{sem:5,id:'c23',name:'Electrónica Análoga',cred:3,comp:'disc'},
+{sem:5,id:'c24',name:'Libre Elección',cred:3,comp:'libre'},
 
-/* SEM 6 */
-{sem:6,id:'LT',name:'Líneas de Transmisión',cred:3,comp:'disc',req:['CVV','MATESP','EM']},
-{sem:6,id:'CTRL',name:'Control',cred:3,comp:'disc',req:['SSL']},
-{sem:6,id:'ME1',name:'Máquinas Eléctricas I',cred:3,comp:'disc',req:['EM']},
-{sem:6,id:'EDIG',name:'Electrónica Digital',cred:3,comp:'disc',req:['EA']},
+{sem:6,id:'c25',name:'Líneas de Transmisión',cred:3,comp:'disc'},
+{sem:6,id:'c26',name:'Control',cred:3,comp:'disc'},
+{sem:6,id:'c27',name:'Máquinas I',cred:3,comp:'disc'},
+{sem:6,id:'c28',name:'Electrónica Digital',cred:3,comp:'disc'},
 
-/* SEM 7 */
-{sem:7,id:'INST',name:'Instalaciones Eléctricas',cred:3,comp:'disc',req:['ME1','LT']},
-{sem:7,id:'ME2',name:'Máquinas Eléctricas II',cred:3,comp:'disc',req:['ME1']},
-{sem:7,id:'TEL',name:'Telecomunicaciones',cred:3,comp:'disc',req:['SSL','EDIG']},
-{sem:7,id:'OD1',name:'Optativa Disciplinar',cred:3,comp:'disc'},
+{sem:7,id:'c29',name:'Instalaciones',cred:3,comp:'disc'},
+{sem:7,id:'c30',name:'Máquinas II',cred:3,comp:'disc'},
+{sem:7,id:'c31',name:'Telecomunicaciones',cred:3,comp:'disc'},
+{sem:7,id:'c32',name:'Optativa',cred:3,comp:'disc'},
 
-/* SEM 8 */
-{sem:8,id:'LABM',name:'Lab. Máquinas Eléctricas',cred:2,comp:'disc',req:['ME2']},
-{sem:8,id:'GEN',name:'Generación de Energía',cred:3,comp:'disc',req:['ME2']},
-{sem:8,id:'POT',name:'Sistemas de Potencia',cred:3,comp:'disc',req:['ME2','TERMO']},
-{sem:8,id:'AUTO',name:'Automatización',cred:3,comp:'disc',req:['EDIG']},
-{sem:8,id:'LE5',name:'Libre Elección',cred:3,comp:'libre'},
+{sem:8,id:'c33',name:'Lab Máquinas',cred:2,comp:'disc'},
+{sem:8,id:'c34',name:'Generación',cred:3,comp:'disc'},
+{sem:8,id:'c35',name:'Sistemas de Potencia',cred:3,comp:'disc'},
+{sem:8,id:'c36',name:'Automatización',cred:3,comp:'disc'},
+{sem:8,id:'c37',name:'Libre Elección',cred:3,comp:'libre'},
 
-/* SEM 9 */
-{sem:9,id:'RED',name:'Redes de Transmisión',cred:3,comp:'disc',req:['POT']},
-{sem:9,id:'PROT',name:'Protecciones Eléctricas',cred:3,comp:'disc',req:['POT']},
-{sem:9,id:'OD2',name:'Optativa Disciplinar',cred:3,comp:'disc'},
-{sem:9,id:'LE6',name:'Libre Elección',cred:3,comp:'libre'},
+{sem:9,id:'c38',name:'Redes Eléctricas',cred:3,comp:'disc'},
+{sem:9,id:'c39',name:'Protecciones',cred:3,comp:'disc'},
+{sem:9,id:'c40',name:'Optativa',cred:3,comp:'disc'},
+{sem:9,id:'c41',name:'Libre Elección',cred:3,comp:'libre'},
 
-/* SEM 10 */
-{sem:10,id:'TG',name:'Trabajo de Grado',cred:6,comp:'disc'},
-{sem:10,id:'LE7',name:'Libre Elección',cred:3,comp:'libre'},
-{sem:10,id:'LE8',name:'Libre Elección',cred:3,comp:'libre'},
-{sem:10,id:'LE9',name:'Libre Elección',cred:4,comp:'libre'},
+{sem:10,id:'c42',name:'Trabajo de Grado',cred:6,comp:'disc'},
+{sem:10,id:'c43',name:'Libre Elección',cred:3,comp:'libre'},
+{sem:10,id:'c44',name:'Libre Elección',cred:3,comp:'libre'},
+{sem:10,id:'c45',name:'Libre Elección',cred:4,comp:'libre'}
 ];
 
-let approved=JSON.parse(localStorage.getItem('ie_unal')||'[]');
+let approved=JSON.parse(localStorage.getItem('aprobadas')||'[]');
+const malla=document.getElementById('malla');
+const counter=document.getElementById('counter');
 
 function calc(comp){
  const total=data.filter(c=>c.comp===comp).reduce((s,c)=>s+c.cred,0);
  const done=data.filter(c=>c.comp===comp && approved.includes(c.id)).reduce((s,c)=>s+c.cred,0);
- return {done,total,p:Math.round(done/total*100)||0};
+ return {total,done,percent:Math.round(done/total*100)||0}
 }
 
 function render(){
@@ -265,34 +215,31 @@ function render(){
  const f=calc('fund'), d=calc('disc'), l=calc('libre');
  const totalDone=f.done+d.done+l.done;
  const totalAll=data.reduce((s,c)=>s+c.cred,0);
- const tp=Math.round(totalDone/totalAll*100);
 
- pf.textContent=f.p+'%'; pfb.style.width=f.p+'%';
- pd.textContent=d.p+'%'; pdb.style.width=d.p+'%';
- pl.textContent=l.p+'%'; plb.style.width=l.p+'%';
- pt.textContent=tp+'%'; ptb.style.width=tp+'%';
+ counter.innerHTML=`
+ <b>Total:</b> ${totalDone}/${totalAll} créditos<br>
+ Fundamentación ${f.percent}%
+ <div class="progress"><span style="width:${f.percent}%;background:#b69cd8"></span></div>
+ Disciplinar ${d.percent}%
+ <div class="progress"><span style="width:${d.percent}%;background:#7fd6c3"></span></div>
+ Libre Elección ${l.percent}%
+ <div class="progress"><span style="width:${l.percent}%;background:#e8c25d"></span></div>
+ `;
 
  for(let s=1;s<=10;s++){
   const col=document.createElement('div');
   col.className='semester';
   col.innerHTML=`<h2>Semestre ${s}</h2>`;
-
   data.filter(c=>c.sem===s).forEach(c=>{
-   let locked=false,tip='';
-   if(c.req && !c.req.every(r=>approved.includes(r))){
-    locked=true; tip='Faltan prerrequisitos';
-   }
-   if(c.fundPercent && f.p<c.fundPercent){
-    locked=true; tip='Requiere 40% Fundamentación';
-   }
+   let locked=false;
+   if(c.fundPercent && f.percent<c.fundPercent)locked=true;
    const d=document.createElement('div');
    d.className=`course ${c.comp} ${approved.includes(c.id)?'approved':''} ${locked?'locked':''}`;
-   d.innerHTML=`<b>${c.name}</b><br><small>${c.cred} créditos</small>`;
-   if(locked) d.dataset.tip=tip;
+   d.innerHTML=`<b>${c.name}</b><br>${c.cred} créditos`;
    d.onclick=()=>{
     if(locked)return;
     approved.includes(c.id)?approved=approved.filter(x=>x!==c.id):approved.push(c.id);
-    localStorage.setItem('ie_unal',JSON.stringify(approved));
+    localStorage.setItem('aprobadas',JSON.stringify(approved));
     render();
    };
    col.appendChild(d);
@@ -301,12 +248,10 @@ function render(){
  }
 }
 
-function resetProgress(){
- if(confirm('¿Restablecer progreso?')){
-  approved=[];
-  localStorage.removeItem('ie_unal');
-  render();
- }
+function resetAll(){
+ approved=[];
+ localStorage.removeItem('aprobadas');
+ render();
 }
 
 render();
