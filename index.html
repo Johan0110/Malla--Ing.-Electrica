@@ -222,47 +222,63 @@ button{
 /* ===================== */
 const data=[
  {sem:1,id:'1000004',n:'Cálculo Diferencial',c:4,t:'fund'},
- {sem:1,id:'1000008',n:'Geometría Vectorial',c:4,t:'fund'},
- {sem:1,id:'3009531',n:'Introducción Ing. Eléctrica',c:2,t:'disc'},
+ {sem:1,id:'1000008',n:'Geometría Vectorial y Analítica',c:4,t:'fund'},
+ {sem:1,id:'3009531',n:'Introducción a la Ing. Eléctrica',c:2,t:'disc'},
  {sem:1,id:'LE1',n:'Libre Elección',c:3,t:'libre'},
-
+ {sem:1,id:'LE2',n:'Libre Elección',c:3,t:'libre'},
+ 
  {sem:2,id:'1000005',n:'Cálculo Integral',c:4,t:'fund',req:['1000004']},
  {sem:2,id:'1000003',n:'Álgebra Lineal',c:4,t:'fund',req:['1000008']},
  {sem:2,id:'1000019',n:'Física Mecánica',c:4,t:'fund',req:['1000004','1000008']},
- {sem:2,id:'3010481',n:'Circuitos I',c:3,t:'disc',req:['1000004']},
- {sem:2,id:'LE2',n:'Libre Elección',c:3,t:'libre'},
+ {sem:2,id:'3010481',n:'Análisis de Circuitos Eléctricos I',c:3,t:'disc',req:['1000004']},
+ {sem:2,id:'LE3',n:'Libre Elección',c:3,t:'libre'},
 
- {sem:3,id:'1000006',n:'Cálculo Multivariable',c:4,t:'fund',req:['1000005']},
+ {sem:3,id:'1000006',n:'Cálculo en varias variables',c:4,t:'fund',req:['1000005']},
  {sem:3,id:'1000007',n:'Ecuaciones Diferenciales',c:4,t:'fund',req:['1000005','1000003']},
- {sem:3,id:'1000017',n:'Electricidad y Magnetismo',c:4,t:'fund',req:['1000019','1000005']},
- {sem:3,id:'3010435',n:'Programación',c:3,t:'fund'},
- {sem:3,id:'LE3',n:'Libre Elección',c:3,t:'libre'},
+ {sem:3,id:'1000017',n:'Fisica de Electricidad y Magnetismo',c:4,t:'fund',req:['1000019','1000005']},
+ {sem:3,id:'3010435',n:'Fundamentos de Programación',c:3,t:'fund'},
+ {sem:3,id:'LE4',n:'Libre Elección',c:3,t:'libre'},
 
  {sem:4,id:'3010651',n:'Estadística I',c:3,t:'fund',req:['1000005']},
  {sem:4,id:'3006905',n:'Matemáticas Especiales',c:4,t:'fund',req:['1000007']},
- {sem:4,id:'3006907',n:'Métodos Numéricos',c:4,t:'fund',req:['1000005','1000003']},
- {sem:4,id:'3010496',n:'Circuitos II',c:3,t:'disc',req:['3010481','1000007']},
- {sem:4,id:'LE4',n:'Libre Elección',c:3,t:'libre'},
+ {sem:4,id:'3006907',n:'Métodos Numéricos',c:4,t:'fund',req:['1000005','1000003','1000006','3006905']},
+ {sem:4,id:'3010496',n:'Análisis de Circuitos Electricos II',c:3,t:'disc',req:['3010481','1000007']},
+ {sem:4,id:'3010435',n:'Laboratorios de Circuitos',c:1,t:'disc'},
 
- {sem:5,id:'3010421',n:'Señales y Sistemas',c:3,t:'disc',req:['3006905']},
+ {sem:5,id:'',n:'Optativa de Fundamentacion',c:3,t:'fund'},
+ {sem:5,id:'3010421',n:'Señales y Sistemas lineales',c:3,t:'disc'},
  {sem:5,id:'3010520',n:'Teoría Electromagnética',c:3,t:'disc',req:['1000017']},
+ {sem:5,id:'3010458',n:'Electrónica Análoga I',c:3,t:'disc',req:['3010496','3007756']},
  {sem:5,id:'LE5',n:'Libre Elección',c:3,t:'libre'},
-
- {sem:6,id:'3010490',n:'Líneas de Transmisión',c:3,t:'disc',req:['1000006','3006905','3010520']},
+ {sem:5,id:'LE6',n:'Libre Elección',c:3,t:'libre'},
+ 
+ {sem:6,id:'3010490',n:'Modelo de Líneas de Transmisión',c:3,t:'disc',req:['3010520']},
+ {sem:6,id:'3010402',n:'Control:Entrada - Salida',c:3,t:'disc',req:['3010421']},
  {sem:6,id:'3010661',n:'Máquinas Eléctricas I',c:3,t:'disc',req:['3010520']},
- {sem:6,id:'LE6',n:'Libre Elección',c:3,t:'libre'},
+ {sem:6,id:'3010457',n:'Electrónica Análoga II',c:3,t:'disc',req:['3010458']},
+ {sem:6,id:'3010483',n:'Electrónica Digital',c:3,t:'disc',req:['3010458']},
 
+ {sem:7,id:'',n:'Optativa disciplinar',c:3,t:'disc'},
+ {sem:7,id:'3010529',n:'Instalaciones Eléctricas Indus. Y Residenciales',c:3,t:'disc',req:['3010661','3010490']},
  {sem:7,id:'3010662',n:'Máquinas Eléctricas II',c:3,t:'disc',req:['3010661']},
- {sem:7,id:'3010494',n:'Telecomunicaciones',c:3,t:'disc',req:['3010421']},
- {sem:7,id:'LE7',n:'Libre Elección',c:3,t:'libre'},
+ {sem:7,id:'3010494',n:'Telecomunicaciones',c:3,t:'disc',req:['3010421','3010483']},
+ {sem:7,id:'',n:'Optativa disciplinar',c:3,t:'disc'},
 
- {sem:8,id:'3010497',n:'Sistemas de Potencia',c:3,t:'disc',req:['3010662']},
- {sem:8,id:'LE8',n:'Libre Elección',c:3,t:'libre'},
+ {sem:8,id:'3010538',n:'Laboratorio de Máquinas Eléctricas',c:2,t:'disc'},
+ {sem:8,id:'3010529',n:'Sistemas de Generación de Energía Eléctrica',c:3,t:'disc',req:['3010662','3010478']},
+ {sem:8,id:'3010497',n:'Análisis de Sistemas de Potencia',c:3,t:'disc',req:['3010662','3010490']},
+ {sem:8,id:'3010398',n:'Automatización de Sistemas Eléctricos',c:3,t:'disc',req:['3010483','3010538']},
+ {sem:8,id:'LE7',n:'Libre Elección',c:3,t:'libre'},
 
- {sem:9,id:'3010482',n:'Redes Eléctricas',c:3,t:'disc',req:['3010497']},
- {sem:9,id:'LE9',n:'Libre Elección',c:3,t:'libre'},
+ {sem:9,id:'',n:'Optativa disciplinar',c:3,t:'disc'},
+ {sem:9,id:'3010482',n:'Diseño de Redes de Transmisión y Distribución',c:3,t:'disc',req:['3010497']},
+ {sem:9,id:'3010492',n:'Sistemas de Protecciones Eléctricas',c:3,t:'disc',req:['3010497']},
+ {sem:9,id:'LE8',n:'Libre Elección',c:3,t:'libre'},
 
  {sem:10,id:'3007424',n:'Trabajo de Grado',c:6,t:'disc'}
+ {sem:10,id:'LE9',n:'Libre Elección',c:3,t:'libre'},
+ {sem:10,id:'LE10',n:'Libre Elección',c:3,t:'libre'},
+ {sem:10,id:'LE11',n:'Libre Elección',c:4,t:'libre'},
 ];
 
 /* ===================== */
