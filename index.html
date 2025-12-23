@@ -61,7 +61,7 @@ button{
 
 <body>
 
-<h1>Malla Curricular Interactiva – Ingeniería Eléctrica (UNAL)</h1>
+<h1>Malla Curricular – Ingeniería Eléctrica (UNAL)</h1>
 
 <div class="top">
   <div id="contador"></div>
@@ -79,67 +79,58 @@ button{
 
 <script>
 const data=[
-// ===== SEMESTRE I =====
+
 {sem:1,id:'1000004',name:'Cálculo Diferencial',cred:4,comp:'fund'},
 {sem:1,id:'1000008',name:'Geometría Vectorial y Analítica',cred:4,comp:'fund'},
 {sem:1,id:'3009531',name:'Introducción a la Ingeniería Eléctrica',cred:2,comp:'disc'},
 {sem:1,id:'LE1',name:'Libre Elección',cred:3,comp:'libre'},
 {sem:1,id:'LE2',name:'Libre Elección',cred:3,comp:'libre'},
 
-// ===== SEMESTRE II =====
 {sem:2,id:'1000005',name:'Cálculo Integral',cred:4,comp:'fund',req:['1000004']},
 {sem:2,id:'1000003',name:'Álgebra Lineal',cred:4,comp:'fund',req:['1000008']},
 {sem:2,id:'1000019',name:'Física Mecánica',cred:4,comp:'fund',req:['1000004','1000008']},
 {sem:2,id:'3010481',name:'Análisis de Circuitos Eléctricos I',cred:3,comp:'disc',req:['1000004']},
 {sem:2,id:'LE3',name:'Libre Elección',cred:3,comp:'libre'},
-
-// ===== SEMESTRE III =====
+ 
 {sem:3,id:'1000006',name:'Cálculo en Varias Variables',cred:4,comp:'fund',req:['1000005']},
 {sem:3,id:'1000007',name:'Ecuaciones Diferenciales',cred:4,comp:'fund',req:['1000005','1000003']},
 {sem:3,id:'1000017',name:'Física Electricidad y Magnetismo',cred:4,comp:'fund',req:['1000019','1000005']},
 {sem:3,id:'3010435',name:'Fundamentos de Programación',cred:3,comp:'fund'},
 {sem:3,id:'3010478',name:'Termodinámica General',cred:3,comp:'disc'},
 
-// ===== SEMESTRE IV =====
 {sem:4,id:'3010651',name:'Estadística I',cred:3,comp:'fund',req:['1000005']},
 {sem:4,id:'3006905',name:'Matemáticas Especiales',cred:4,comp:'fund',req:['1000007']},
 {sem:4,id:'3006907',name:'Métodos Numéricos',cred:4,comp:'fund',req:['1000005','1000003']},
 {sem:4,id:'3010496',name:'Análisis de Circuitos Eléctricos II',cred:3,comp:'disc',req:['3010481','1000007']},
 {sem:4,id:'3010408',name:'Fundamentos de Proyectos en Ingeniería',cred:3,comp:'disc',fundPercent:40},
 
-// ===== SEMESTRE V =====
 {sem:5,id:'3010421',name:'Señales y Sistemas Lineales',cred:3,comp:'disc',req:['3006905']},
 {sem:5,id:'3010520',name:'Teoría Electromagnética',cred:3,comp:'disc',req:['1000017']},
 {sem:5,id:'3010458',name:'Electrónica Análoga I',cred:3,comp:'disc',req:['3010496']},
 {sem:5,id:'LE4',name:'Libre Elección',cred:3,comp:'libre'},
 {sem:5,id:'LE5',name:'Libre Elección',cred:3,comp:'libre'},
 
-// ===== SEMESTRE VI =====
 {sem:6,id:'3010490',name:'Modelado de Líneas de Transmisión',cred:3,comp:'disc',req:['1000006','3006905','3010520']},
 {sem:6,id:'3010402',name:'Control Entrada-Salida',cred:3,comp:'disc',req:['3010421']},
 {sem:6,id:'3010661',name:'Máquinas Eléctricas I',cred:3,comp:'disc',req:['3010520']},
 {sem:6,id:'3010483',name:'Electrónica Digital',cred:3,comp:'disc',req:['3010458']},
 
-// ===== SEMESTRE VII =====
 {sem:7,id:'3010658',name:'Instalaciones Eléctricas',cred:3,comp:'disc',req:['3010661','3010490']},
 {sem:7,id:'3010662',name:'Máquinas Eléctricas II',cred:3,comp:'disc',req:['3010661']},
 {sem:7,id:'3010494',name:'Telecomunicaciones',cred:3,comp:'disc',req:['3010421','3010483']},
 {sem:7,id:'OD1',name:'Optativa Disciplinar',cred:3,comp:'disc'},
 
-// ===== SEMESTRE VIII =====
 {sem:8,id:'3010538',name:'Laboratorio de Máquinas Eléctricas',cred:2,comp:'disc',req:['3010662']},
 {sem:8,id:'3010529',name:'Sistemas de Generación de Energía Eléctrica',cred:3,comp:'disc',req:['3010662']},
 {sem:8,id:'3010497',name:'Análisis de Sistemas de Potencia',cred:3,comp:'disc',req:['3010662','3010478']},
 {sem:8,id:'3010398',name:'Automatización de Sistemas Eléctricos',cred:3,comp:'disc',req:['3010483']},
 {sem:8,id:'LE6',name:'Libre Elección',cred:3,comp:'libre'},
 
-// ===== SEMESTRE IX =====
 {sem:9,id:'3010482',name:'Diseño de Redes de Transmisión y Distribución',cred:3,comp:'disc',req:['3010497']},
 {sem:9,id:'3010492',name:'Sistemas de Protecciones Eléctricas',cred:3,comp:'disc',req:['3010497']},
 {sem:9,id:'OD2',name:'Optativa Disciplinar',cred:3,comp:'disc'},
 {sem:9,id:'LE7',name:'Libre Elección',cred:3,comp:'libre'},
 
-// ===== SEMESTRE X =====
 {sem:10,id:'3007424',name:'Trabajo de Grado',cred:6,comp:'disc'},
 {sem:10,id:'LE8',name:'Libre Elección',cred:3,comp:'libre'},
 {sem:10,id:'LE9',name:'Libre Elección',cred:3,comp:'libre'},
