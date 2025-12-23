@@ -6,12 +6,12 @@
 
 <style>
 :root{
- --fund:#dcd1f2;
- --disc:#cfeee8;
- --libre:#fdecc8;
- --bg:#f6f7fb;
+ --fund:#e6dcfa;
+ --disc:#d8f3ee;
+ --libre:#fff1cc;
+ --bg:#f5f6fa;
  --card:#ffffff;
- --text:#2c3e50;
+ --text:#1f2937;
 }
 
 *{box-sizing:border-box}
@@ -29,7 +29,7 @@ h1{
  font-weight:600;
 }
 
-/* HEADER */
+/* CONTENEDOR SUPERIOR */
 .dashboard{
  max-width:1200px;
  margin:0 auto;
@@ -39,21 +39,32 @@ h1{
 .summary{
  display:grid;
  grid-template-columns:2fr 1fr;
- gap:15px;
+ gap:16px;
 }
 
 .box{
  background:var(--card);
- border-radius:16px;
- padding:16px;
+ border-radius:18px;
+ padding:18px;
  box-shadow:0 8px 24px rgba(0,0,0,.06);
+}
+
+/* CONTADOR GRANDE */
+.big-counter{
+ font-size:32px;
+ font-weight:700;
+ margin-bottom:10px;
+}
+.big-counter span{
+ font-size:14px;
+ font-weight:500;
+ color:#6b7280;
 }
 
 /* PROGRESO */
 .progress-group{
  margin-bottom:14px;
 }
-
 .progress-group small{
  font-weight:600;
 }
@@ -77,9 +88,8 @@ h1{
  gap:10px;
  flex-wrap:wrap;
 }
-
 .legend div{
- padding:6px 12px;
+ padding:6px 14px;
  border-radius:20px;
  font-size:12px;
 }
@@ -87,8 +97,8 @@ h1{
 /* BOTÓN */
 button{
  border:none;
- padding:10px 16px;
- border-radius:12px;
+ padding:10px 18px;
+ border-radius:14px;
  background:#ef4444;
  color:#fff;
  cursor:pointer;
@@ -108,7 +118,7 @@ button:hover{opacity:.9}
 
 .semester{
  background:var(--card);
- border-radius:18px;
+ border-radius:20px;
  padding:12px;
  box-shadow:0 6px 18px rgba(0,0,0,.05);
 }
@@ -121,7 +131,7 @@ button:hover{opacity:.9}
 }
 
 .course{
- border-radius:14px;
+ border-radius:16px;
  padding:10px;
  margin-bottom:8px;
  font-size:12px;
@@ -141,17 +151,17 @@ button:hover{opacity:.9}
  content:"Bloqueada";
  position:absolute;
  inset:0;
- background:rgba(255,255,255,.75);
+ background:rgba(255,255,255,.8);
  display:flex;
  align-items:center;
  justify-content:center;
- border-radius:14px;
+ border-radius:16px;
  font-size:11px;
  font-weight:600;
  color:#555;
 }
 
-/* COMPONENTES */
+/* COLORES COMPONENTES */
 .fund{background:var(--fund)}
 .disc{background:var(--disc)}
 .libre{background:var(--libre)}
@@ -172,6 +182,7 @@ button:hover{opacity:.9}
 <div class="dashboard">
  <div class="summary">
   <div class="box" id="stats"></div>
+
   <div class="box">
    <div class="legend">
     <div style="background:var(--fund)">Fundamentación</div>
@@ -187,14 +198,14 @@ button:hover{opacity:.9}
 <div class="grid" id="grid"></div>
 
 <div class="footer">
- Haz clic en una materia para marcarla como aprobada · Se guarda automáticamente
+ Haz clic en una materia para marcarla como aprobada · El progreso se guarda automáticamente
 </div>
 
 <script>
 const data=[
 {sem:1,id:'1',n:'Cálculo Diferencial',c:4,t:'fund'},
 {sem:1,id:'2',n:'Geometría Vectorial',c:4,t:'fund'},
-{sem:1,id:'3',n:'Intro Ing. Eléctrica',c:2,t:'disc'},
+{sem:1,id:'3',n:'Introducción a la Ingeniería Eléctrica',c:2,t:'disc'},
 {sem:1,id:'4',n:'Libre Elección',c:3,t:'libre'},
 {sem:1,id:'5',n:'Libre Elección',c:3,t:'libre'},
 
@@ -207,39 +218,39 @@ const data=[
 {sem:3,id:'11',n:'Cálculo Multivariable',c:4,t:'fund'},
 {sem:3,id:'12',n:'Ecuaciones Diferenciales',c:4,t:'fund'},
 {sem:3,id:'13',n:'Electricidad y Magnetismo',c:4,t:'fund'},
-{sem:3,id:'14',n:'Programación',c:3,t:'fund'},
+{sem:3,id:'14',n:'Fundamentos de Programación',c:3,t:'fund'},
 {sem:3,id:'15',n:'Termodinámica',c:3,t:'disc'},
 
 {sem:4,id:'16',n:'Estadística I',c:3,t:'fund'},
 {sem:4,id:'17',n:'Matemáticas Especiales',c:4,t:'fund'},
 {sem:4,id:'18',n:'Métodos Numéricos',c:4,t:'fund'},
 {sem:4,id:'19',n:'Circuitos II',c:3,t:'disc'},
-{sem:4,id:'20',n:'Lab. Circuitos',c:1,t:'disc',fund:40},
+{sem:4,id:'20',n:'Laboratorio de Circuitos',c:1,t:'disc',fund:40},
 
 {sem:5,id:'21',n:'Señales y Sistemas',c:3,t:'disc'},
-{sem:5,id:'22',n:'Electromagnetismo',c:3,t:'disc'},
+{sem:5,id:'22',n:'Teoría Electromagnética',c:3,t:'disc'},
 {sem:5,id:'23',n:'Electrónica Análoga',c:3,t:'disc'},
 {sem:5,id:'24',n:'Libre Elección',c:3,t:'libre'},
 
 {sem:6,id:'25',n:'Líneas de Transmisión',c:3,t:'disc'},
 {sem:6,id:'26',n:'Control',c:3,t:'disc'},
-{sem:6,id:'27',n:'Máquinas I',c:3,t:'disc'},
+{sem:6,id:'27',n:'Máquinas Eléctricas I',c:3,t:'disc'},
 {sem:6,id:'28',n:'Electrónica Digital',c:3,t:'disc'},
 
-{sem:7,id:'29',n:'Instalaciones',c:3,t:'disc'},
-{sem:7,id:'30',n:'Máquinas II',c:3,t:'disc'},
+{sem:7,id:'29',n:'Instalaciones Eléctricas',c:3,t:'disc'},
+{sem:7,id:'30',n:'Máquinas Eléctricas II',c:3,t:'disc'},
 {sem:7,id:'31',n:'Telecomunicaciones',c:3,t:'disc'},
-{sem:7,id:'32',n:'Optativa',c:3,t:'disc'},
+{sem:7,id:'32',n:'Optativa Disciplinar',c:3,t:'disc'},
 
-{sem:8,id:'33',n:'Lab Máquinas',c:2,t:'disc'},
-{sem:8,id:'34',n:'Generación',c:3,t:'disc'},
+{sem:8,id:'33',n:'Laboratorio de Máquinas',c:2,t:'disc'},
+{sem:8,id:'34',n:'Generación de Energía',c:3,t:'disc'},
 {sem:8,id:'35',n:'Sistemas de Potencia',c:3,t:'disc'},
 {sem:8,id:'36',n:'Automatización',c:3,t:'disc'},
 {sem:8,id:'37',n:'Libre Elección',c:3,t:'libre'},
 
 {sem:9,id:'38',n:'Redes Eléctricas',c:3,t:'disc'},
-{sem:9,id:'39',n:'Protecciones',c:3,t:'disc'},
-{sem:9,id:'40',n:'Optativa',c:3,t:'disc'},
+{sem:9,id:'39',n:'Protecciones Eléctricas',c:3,t:'disc'},
+{sem:9,id:'40',n:'Optativa Disciplinar',c:3,t:'disc'},
 {sem:9,id:'41',n:'Libre Elección',c:3,t:'libre'},
 
 {sem:10,id:'42',n:'Trabajo de Grado',c:6,t:'disc'},
@@ -265,7 +276,9 @@ function render(){
  const totalAll=data.reduce((s,x)=>s+x.c,0);
 
  stats.innerHTML=`
- <b>Total:</b> ${totalDone} / ${totalAll} créditos<br><br>
+ <div class="big-counter">
+  ${totalDone} <span>/ ${totalAll} créditos</span>
+ </div>
 
  <div class="progress-group">
   <small>Fundamentación ${f.p}%</small>
@@ -289,16 +302,16 @@ function render(){
   col.innerHTML=`<h3>Semestre ${s}</h3>`;
   data.filter(x=>x.sem===s).forEach(c=>{
    const locked=c.fund && f.p<c.fund;
-   const d=document.createElement('div');
-   d.className=`course ${c.t} ${done.includes(c.id)?'approved':''} ${locked?'locked':''}`;
-   d.innerHTML=`<b>${c.n}</b><br>${c.c} créditos`;
-   d.onclick=()=>{
+   const div=document.createElement('div');
+   div.className=`course ${c.t} ${done.includes(c.id)?'approved':''} ${locked?'locked':''}`;
+   div.innerHTML=`<b>${c.n}</b><br>${c.c} créditos`;
+   div.onclick=()=>{
     if(locked)return;
     done.includes(c.id)?done=done.filter(x=>x!==c.id):done.push(c.id);
     localStorage.setItem('ie_done',JSON.stringify(done));
     render();
    };
-   col.appendChild(d);
+   col.appendChild(div);
   });
   grid.appendChild(col);
  }
